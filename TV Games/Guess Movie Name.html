@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ananth Chandana | Gender Reveal Party Fun Games</title>
+  <style>
+    :root {
+      --pink: #f6a9c9;
+      --pink-strong: #ec7cab;
+      --blue: #9fdcff;
+      --blue-strong: #63bdf2;
+      --gold: #d9b36c;
+      --cream: #fffaf6;
+      --mist: #fffefe;
+      --text: #5f5165;
+      --text-dark: #4e4354;
+      --line: #eadde5;
+      --panel: rgba(255, 255, 255, 0.72);
+      --panel-strong: rgba(255, 255, 255, 0.86);
+      --shadow: 0 20px 50px rgba(184, 156, 176, 0.22);
+      --shadow-soft: 0 10px 30px rgba(184, 156, 176, 0.16);
+    }
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(246, 169, 201, 0.28), transparent 24%),
+        radial-gradient(circle at top right, rgba(159, 220, 255, 0.30), transparent 24%),
+        radial-gradient(circle at bottom centre, rgba(255, 255, 255, 0.95), transparent 35%),
+        linear-gradient(135deg, #fff8fb 0%, #fffdfb 30%, #f4fbff 70%, #fff8fb 100%);
+      overflow: hidden;
+    }
+
+    .bg-lux {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .glow-left,
+    .glow-right,
+    .glow-centre {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(50px);
+      opacity: 0.28;
+    }
+
+    .glow-left {
+      width: 320px;
+      height: 320px;
+      left: -80px;
+      top: -60px;
+      background: rgba(111, 193, 245, 0.45);
+    }
+
+    .glow-right {
+      width: 320px;
+      height: 320px;
+      right: -80px;
+      top: -60px;
+      background: rgba(239, 141, 186, 0.45);
+    }
+
+    .glow-centre {
+      width: 420px;
+      height: 420px;
+      left: 50%;
+      bottom: -180px;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .floating {
+      position: absolute;
+      opacity: 0.12;
+      font-size: 68px;
+      animation: floatY 8s ease-in-out infinite;
+    }
+
+    .f1 {
+      left: 6%;
+      top: 14%;
+    }
+
+    .f2 {
+      right: 6%;
+      top: 18%;
+    }
+
+    .f3 {
+      left: 10%;
+      bottom: 12%;
+    }
+
+    .f4 {
+      right: 12%;
+      bottom: 10%;
+    }
+
+    .f5 {
+      left: 46%;
+      top: 12%;
+      font-size: 52px;
+      opacity: 0.08;
+    }
+
+    @keyframes floatY {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-14px);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .setup-screen,
+    .game-screen {
+      position: relative;
+      z-index: 1;
+      width: 100vw;
+      height: 100vh;
+      padding: 2vh 2vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .setup-card,
+    .game {
+      width: min(1600px, 97vw);
+      height: min(930px, 96vh);
+      border-radius: 36px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.58));
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .setup-card {
+      padding: 30px;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 18px;
+    }
+
+    .top-couple-bar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 22px 26px 14px;
+      border-bottom: 1px solid rgba(234, 221, 229, 0.85);
+      background: linear-gradient(90deg, rgba(159, 220, 255, 0.10), rgba(255, 255, 255, 0.16), rgba(246, 169, 201, 0.10));
+    }
+
+    .person-card {
+      display: flex;
+      align-items: centre;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.56);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      box-shadow: var(--shadow-soft);
+      border-radius: 22px;
+      padding: 12px 16px;
+      min-height: 78px;
+    }
+
+    .person-card.right {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    .person-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    }
+
+    .boy {
+      background: linear-gradient(135deg, rgba(159, 220, 255, 0.95), rgba(99, 189, 242, 0.95));
+    }
+
+    .girl {
+      background: linear-gradient(135deg, rgba(246, 169, 201, 0.95), rgba(236, 124, 171, 0.95));
+    }
+
+    .person-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .person-role {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #9f8a98;
+      font-weight: 800;
+    }
+
+    .person-name {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--text-dark);
+      line-height: 1;
+    }
+
+    .brand-centre {
+      text-align: center;
+      padding: 0 14px;
+    }
+
+    .brand-kicker {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #b28c83;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      line-height: 1.05;
+      color: var(--text-dark);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .brand-sub {
+      margin-top: 6px;
+      color: #8f7b88;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .setup-panel {
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 22px;
+      overflow: auto;
+      margin-top: 8px;
+    }
+
+    .setup-label {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #ad8aad;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .players-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+    }
+
+    .player-entry {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .num {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(246, 169, 201, 0.14), rgba(159, 220, 255, 0.18));
+      border: 1px solid var(--line);
+      font-weight: 900;
+      color: #7a617c;
+    }
+
+    .player-input,
+    .player-select {
+      min-height: 54px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--text-dark);
+      font-size: 1rem;
+      font-weight: 700;
+      width: 100%;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .setup-actions,
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn,
+    .btn-top {
+      border: none;
+      cursor: pointer;
+      font-weight: 900;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .btn:hover,
+    .btn-top:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn {
+      min-width: 180px;
+      min-height: 58px;
+      padding: 14px 24px;
+      border-radius: 18px;
+      font-size: 1rem;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, var(--pink-strong), #ffafcf);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(236, 124, 171, 0.26);
+    }
+
+    .btn-clear {
+      background: linear-gradient(135deg, var(--blue-strong), #b4e8ff);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(99, 189, 242, 0.24);
+    }
+
+    .game {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 22px;
+      border-bottom: 1px solid rgba(234, 221, 229, 0.85);
+      background: rgba(255, 255, 255, 0.36);
+    }
+
+    .pill {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+      font-weight: 900;
+      color: #846886;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pill strong {
+      color: var(--text-dark);
+    }
+
+    .btn-top {
+      min-height: 52px;
+      padding: 12px 18px;
+      border-radius: 16px;
+      font-size: 1rem;
+    }
+
+    .btn-answer {
+      background: linear-gradient(135deg, var(--pink-strong), #ffb0d0);
+      color: #fff;
+    }
+
+    .btn-full {
+      background: linear-gradient(135deg, var(--blue-strong), #b6e9ff);
+      color: #fff;
+    }
+
+    .btn-score {
+      background: linear-gradient(135deg, #d4b06c, #efd79f);
+      color: #fff;
+    }
+
+    .btn-random {
+      background: linear-gradient(135deg, #8b7cf6, #b9a8ff);
+      color: #fff;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 1.48fr 0.92fr;
+      gap: 18px;
+      padding: 18px;
+      min-height: 0;
+    }
+
+    .panel {
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 22px;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .panel-label {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.84rem;
+      font-weight: 900;
+      color: #ae8d9e;
+      margin-bottom: 12px;
+    }
+
+    .qtag {
+      display: inline-flex;
+      width: fit-content;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 900;
+      background: linear-gradient(90deg, rgba(159, 220, 255, 0.22), rgba(246, 169, 201, 0.22));
+      border: 1px solid var(--line);
+      color: #7a617c;
+      margin-bottom: 14px;
+    }
+
+    .question {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: clamp(1.7rem, 2.45vw, 2.8rem);
+      line-height: 1.3;
+      font-weight: 900;
+      color: var(--text-dark);
+      padding: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .answer-side {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      height: 100%;
+    }
+
+    .answer-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      border-radius: 24px;
+      border: 2px dashed #e8dbe6;
+      background: linear-gradient(135deg, rgba(255, 245, 249, 0.98), rgba(240, 249, 255, 0.98));
+      min-height: 220px;
+    }
+
+    .answer-hidden {
+      font-size: clamp(1rem, 1.4vw, 1.3rem);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: #c2a8b7;
+    }
+
+    .answer-show {
+      font-size: clamp(2rem, 2.8vw, 3rem);
+      font-weight: 900;
+      color: #655893;
+    }
+
+    .action-card {
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .action-label {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #8a6d8d;
+      margin-bottom: 10px;
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .btn-correct {
+      background: linear-gradient(135deg, #74ca88, #9be0aa);
+      color: #fff;
+      width: 100%;
+      box-shadow: 0 10px 22px rgba(116, 202, 136, 0.22);
+    }
+
+    .btn-skip {
+      background: linear-gradient(135deg, #f0b06f, #f7c793);
+      color: #fff;
+      width: 100%;
+      box-shadow: 0 10px 22px rgba(240, 176, 111, 0.22);
+    }
+
+    .controls {
+      padding: 16px 20px 20px;
+      border-top: 1px solid rgba(234, 221, 229, 0.85);
+      background: rgba(255, 255, 255, 0.36);
+    }
+
+    .prev {
+      background: linear-gradient(135deg, #bda9dc, #dacdf0);
+      color: #fff;
+    }
+
+    .toggle {
+      background: linear-gradient(135deg, var(--pink-strong), #ffb0d0);
+      color: #fff;
+    }
+
+    .next {
+      background: linear-gradient(135deg, var(--blue-strong), #b8eaff);
+      color: #fff;
+    }
+
+    .reset {
+      background: linear-gradient(135deg, #d7b977, #efdca6);
+      color: #fff;
+    }
+
+    .score-screen {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 250, 247, 0.98), rgba(245, 250, 255, 0.98));
+      z-index: 10;
+      display: none;
+      flex-direction: column;
+      padding: 28px;
+    }
+
+    .score-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .score-header h2 {
+      margin: 0;
+      font-size: clamp(2rem, 3vw, 3rem);
+      color: var(--text-dark);
+      text-transform: uppercase;
+    }
+
+    .score-header p {
+      margin: 8px 0 0;
+      color: #8b6d90;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .score-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      overflow: auto;
+      padding-right: 6px;
+    }
+
+    .score-card {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .score-name {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--text-dark);
+    }
+
+    .score-points {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #6c5f96;
+    }
+
+    .close-score {
+      align-self: center;
+      margin-top: 20px;
+      background: linear-gradient(135deg, var(--pink-strong), var(--blue-strong));
+      color: #fff;
+      min-width: 220px;
+    }
+
+    .footer-note {
+      position: absolute;
+      right: 18px;
+      bottom: 10px;
+      font-size: 0.82rem;
+      color: #c1a9b6;
+    }
+
+    @media (max-width: 1200px) {
+
+      .players-grid,
+      .score-list,
+      .main,
+      .topbar,
+      .action-buttons,
+      .top-couple-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .person-card.right {
+        justify-content: flex-start;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-lux">
+    <div class="glow-left"></div>
+    <div class="glow-right"></div>
+    <div class="glow-centre"></div>
+
+    <div class="floating f1">✨</div>
+    <div class="floating f2">🎊</div>
+    <div class="floating f3">🎉</div>
+    <div class="floating f4">🪄</div>
+    <div class="floating f5">❣</div>
+  </div>
+
+  <div class="setup-screen" id="setupScreen">
+    <div class="setup-card">
+      <div class="top-couple-bar">
+        <div class="person-card">
+          <div class="person-icon boy">👶💙</div>
+          <div class="person-meta">
+            <div class="person-role">Daddy To Be</div>
+            <div class="person-name">Ananth</div>
+          </div>
+        </div>
+
+        <div class="brand-centre">
+          <div class="brand-kicker">Gender Reveal Party</div>
+          <h1 class="brand-title">Fun Games</h1>
+          <div class="brand-sub">A special celebration for our little one</div>
+        </div>
+
+        <div class="person-card right">
+          <div class="person-meta">
+            <div class="person-role">Mummy To Be</div>
+            <div class="person-name">Chandana</div>
+          </div>
+          <div class="person-icon girl">👶🩷</div>
+        </div>
+      </div>
+
+      <div class="setup-panel">
+        <div class="setup-label">Enter up to 10 player names before starting</div>
+        <div class="players-grid" id="setupPlayersGrid"></div>
+      </div>
+
+      <div class="setup-actions">
+        <button class="btn btn-clear" onclick="clearPlayerNames()">Clear Names</button>
+        <button class="btn btn-start" onclick="startGame()">Start Game</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-screen hidden" id="gameScreen">
+    <div class="game">
+      <div class="top-couple-bar">
+        <div class="person-card">
+          <div class="person-icon boy">👶💙</div>
+          <div class="person-meta">
+            <div class="person-role">Daddy To Be</div>
+            <div class="person-name">Ananth</div>
+          </div>
+        </div>
+
+        <div class="brand-centre">
+          <div class="brand-kicker">Gender Reveal Party</div>
+          <h1 class="brand-title">Guess The Telugu Movie</h1>
+          <div class="brand-sub">Fun Games</div>
+        </div>
+
+        <div class="person-card right">
+          <div class="person-meta">
+            <div class="person-role">Mummy To Be</div>
+            <div class="person-name">Chandana</div>
+          </div>
+          <div class="person-icon girl">👶🩷</div>
+        </div>
+      </div>
+
+      <div class="topbar">
+        <div class="pill" id="progress">🎯 <strong>Question 1 of 56</strong></div>
+        <div class="pill" id="tracker">Done: 0 | Left: 56</div>
+        <button class="btn-top btn-answer" id="topAnswerBtn" onclick="toggleAnswer()">Show Answer</button>
+        <button class="btn-top btn-random" onclick="randomQuestion()">Random</button>
+        <button class="btn-top btn-full" onclick="toggleFullscreen()">Full Screen</button>
+        <button class="btn-top btn-score" onclick="toggleScoreScreen(true)">Score Screen</button>
+        <select id="playMode" class="player-select" onchange="setPlayMode(this.value)">
+          <option value="sequence">Sequence</option>
+          <option value="random">Random</option>
+        </select>
+      </div>
+
+      <div class="main">
+        <div class="panel">
+          <div class="panel-label">Dialogue</div>
+          <div class="qtag" id="qtag">Question 1</div>
+          <div class="question" id="questionText"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Answer</div>
+          <div class="answer-side">
+            <div class="answer-box">
+              <div id="answerText" class="answer-hidden">Click Show Answer</div>
+            </div>
+
+            <div class="action-card">
+              <div class="action-label">Who answered correctly?</div>
+              <select id="answeringPlayer" class="player-select"></select>
+
+              <div class="action-buttons">
+                <button class="btn btn-correct" onclick="awardPoint()">Correct +1</button>
+                <button class="btn btn-skip" onclick="goToNextQuestion()">Skip</button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn prev" onclick="prevQuestion()">◀ Previous</button>
+        <!-- <button class="btn toggle" id="bottomAnswerBtn" onclick="toggleAnswer()">Show Answer</button>
+        <button class="btn btn-random" onclick="randomQuestion()">Random</button> -->
+        <button class="btn btn-score" onclick="toggleScoreScreen(true)">Score Screen</button>
+        <button class="btn next" onclick="nextQuestion()">Next ▶</button>
+        <button class="btn reset" onclick="resetGame()">Reset Game</button>
+      </div>
+
+      <div class="footer-note">Keys: ← previous • → next • space show/hide • R random • F full screen • S score screen
+      </div>
+
+      <div class="score-screen" id="scoreScreen">
+        <div class="score-header">
+          <div class="brand-kicker">Gender Reveal Party</div>
+          <h2>Fun Games Score Board</h2>
+          <p>Ananth 👶💙 & Chandana 👶🩷</p>
+        </div>
+        <div class="score-list" id="scoreList"></div>
+        <button class="btn close-score" onclick="toggleScoreScreen(false)">Back to Game</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "Question 001", a: "Answer 001" },
+      { q: "Question 002", a: "Answer 002" },
+      { q: "Question 003", a: "Answer 003" },
+      { q: "Question 004", a: "Answer 004" },
+      { q: "Question 005", a: "Answer 005" },
+      { q: "Question 006", a: "Answer 006" },
+      { q: "Question 007", a: "Answer 007" },
+      { q: "Question 008", a: "Answer 008" },
+      { q: "Question 009", a: "Answer 009" },
+      { q: "Question 010", a: "Answer 010" },
+      { q: "Question 011", a: "Answer 011" },
+      { q: "Question 012", a: "Answer 012" },
+      { q: "Question 013", a: "Answer 013" }, { q: "Question 014", a: "Answer 014" }, { q: "Question 015", a: "Answer 015" },
+      { q: "Question 016", a: "Answer 016" }, { q: "Question 017", a: "Answer 017" }, { q: "Question 018", a: "Answer 018" }, { q: "Question 019", a: "Answer 019" },
+      { q: "Question 020", a: "Answer 020" }, { q: "Question 021", a: "Answer 021" }, { q: "Question 022", a: "Answer 022" }, { q: "Question 023", a: "Answer 023" },
+      { q: "Question 024", a: "Answer 024" }, { q: "Question 025", a: "Answer 025" }, { q: "Question 026", a: "Answer 026" }, { q: "Question 027", a: "Answer 027" }, { q: "Question 028", a: "Answer 028" },
+      { q: "Question 029", a: "Answer 029" }, { q: "Question 030", a: "Answer 030" }, { q: "Question 031", a: "Answer 031" }, { q: "Question 032", a: "Answer 032" },
+      { q: "Question 033", a: "Answer 033" }, { q: "Question 034", a: "Answer 034" },
+      { q: "Question 035", a: "Answer 035" }, { q: "Question 036", a: "Answer 036" }
+    ];
+
+    const maxPlayers = 10;
+ 
+let currentIndex = 0;
+let answerVisible = false;
+let gameStarted = false;
+let randomPool = [];
+let playMode = "sequence";
+let completedQuestions = new Set();
+ 
+const players = Array.from(
+{ length: maxPlayers },
+(_, i) => ({
+id: i + 1,
+name: "",
+score: 0
+})
+);
+ 
+function buildSetupInputs() {
+const grid =
+document.getElementById("setupPlayersGrid");
+ 
+grid.innerHTML = "";
+ 
+players.forEach((player, index) => {
+const row = document.createElement("div");
+ 
+row.className = "player-entry";
+ 
+row.innerHTML = `
+<div class="num">${index + 1}</div>
+<input
+class="player-input"
+type="text"
+placeholder="Enter player ${index + 1} name"
+oninput="updatePlayerName(${index}, this.value)"
+/>
+`;
+ 
+grid.appendChild(row);
+});
+}
+ 
+function updatePlayerName(index, value) {
+players[index].name = value.trim();
+}
+ 
+function clearPlayerNames() {
+players.forEach(p => {
+p.name = "";
+p.score = 0;
+});
+ 
+buildSetupInputs();
+}
+ 
+function getActivePlayers() {
+return players.filter(p => p.name);
+}
+ 
+function startGame() {
+const activePlayers = getActivePlayers();
+ 
+if (activePlayers.length === 0) {
+alert("Please enter at least one player name.");
+return;
+}
+ 
+gameStarted = true;
+ 
+document
+.getElementById("setupScreen")
+.classList.add("hidden");
+ 
+document
+.getElementById("gameScreen")
+.classList.remove("hidden");
+ 
+refreshPlayerSelect();
+rebuildRandomPool();
+renderScoreScreen();
+renderQuestion();
+}
+ 
+function refreshPlayerSelect() {
+const select =
+document.getElementById("answeringPlayer");
+ 
+select.innerHTML = "";
+ 
+getActivePlayers().forEach(player => {
+const option =
+document.createElement("option");
+ 
+option.value = player.id;
+option.textContent = player.name;
+ 
+select.appendChild(option);
+});
+}
+ 
+function renderScoreScreen() {
+const list =
+document.getElementById("scoreList");
+ 
+if (!list) return;
+ 
+list.innerHTML = "";
+ 
+const activePlayers =
+[...getActivePlayers()]
+.sort(
+(a, b) =>
+b.score - a.score ||
+a.name.localeCompare(b.name)
+);
+ 
+if (activePlayers.length === 0) {
+list.innerHTML = `
+<div class="score-card">
+<div class="score-name">
+No players
+</div>
+<div class="score-points">
+0
+</div>
+</div>
+`;
+ 
+return;
+}
+ 
+activePlayers.forEach((player, index) => {
+const card =
+document.createElement("div");
+ 
+card.className = "score-card";
+ 
+card.innerHTML = `
+<div class="score-name">
+${index + 1}. ${player.name}
+</div>
+<div class="score-points">
+${player.score}
+</div>
+`;
+ 
+list.appendChild(card);
+});
+}
+ 
+function rebuildRandomPool() {
+randomPool = questions
+.map((_, i) => i)
+.filter(
+i => !completedQuestions.has(i)
+);
+}
+ 
+function updateTracker() {
+const done =
+completedQuestions.size;
+ 
+const left =
+questions.length - done;
+ 
+document.getElementById(
+"tracker"
+).textContent =
+`Done: ${done} | Left: ${left}`;
+}
+ 
+function renderQuestion() {
+const item =
+questions[currentIndex];
+ 
+document.getElementById(
+"qtag"
+).textContent =
+`Question ${currentIndex + 1}`;
+ 
+document.getElementById(
+"progress"
+).innerHTML =
+`🎯 <strong>Question ${
+currentIndex + 1
+} of ${
+questions.length
+}</strong>`;
+ 
+document.getElementById(
+"questionText"
+).textContent = item.q;
+ 
+const answerText =
+document.getElementById(
+"answerText"
+);
+ 
+const topBtn =
+document.getElementById(
+"topAnswerBtn"
+);
+ 
+if (answerVisible) {
+answerText.textContent =
+item.a;
+ 
+answerText.className =
+"answer-show";
+ 
+topBtn.textContent =
+"Hide Answer";
+} else {
+answerText.textContent =
+"Click Show Answer";
+ 
+answerText.className =
+"answer-hidden";
+ 
+topBtn.textContent =
+"Show Answer";
+}
+ 
+rebuildRandomPool();
+updateTracker();
+renderScoreScreen();
+}
+ 
+function toggleAnswer() {
+answerVisible =
+!answerVisible;
+ 
+renderQuestion();
+}
+ 
+function nextQuestion() {
+if (
+currentIndex <
+questions.length - 1
+) {
+currentIndex++;
+}
+ 
+answerVisible = false;
+ 
+renderQuestion();
+}
+ 
+function prevQuestion() {
+if (currentIndex > 0) {
+currentIndex--;
+}
+ 
+answerVisible = false;
+ 
+renderQuestion();
+}
+ 
+function setPlayMode(mode) {
+playMode =
+mode === "random"
+? "random"
+: "sequence";
+}
+ 
+function goToNextQuestion() {
+completedQuestions.add(
+currentIndex
+);
+ 
+rebuildRandomPool();
+updateTracker();
+ 
+if (playMode === "random") {
+randomQuestion();
+} else {
+nextQuestion();
+}
+}
+ 
+function randomQuestion() {
+rebuildRandomPool();
+ 
+if (randomPool.length === 0) {
+alert(
+"All questions completed!"
+);
+return;
+}
+ 
+const randomIndex =
+Math.floor(
+Math.random() *
+randomPool.length
+);
+ 
+currentIndex =
+randomPool[randomIndex];
+ 
+answerVisible = false;
+ 
+renderQuestion();
+}
+ 
+function awardPoint() {
+const select =
+document.getElementById(
+"answeringPlayer"
+);
+ 
+const playerId =
+Number(select.value);
+ 
+const player =
+players.find(
+p => p.id === playerId
+);
+ 
+if (!player) {
+alert(
+"Please choose a player."
+);
+return;
+}
+ 
+player.score++;
+ 
+renderScoreScreen();
+ 
+goToNextQuestion();
+}
+ 
+
+
+function resetGame() {
+const confirmReset = confirm(
+"⚠️ Are you sure you want to reset the game?\n\nAll scores and progress will be lost."
+);
+ 
+if (!confirmReset) return;
+ 
+currentIndex = 0;
+answerVisible = false;
+ 
+completedQuestions = new Set();
+randomPool = [];
+ 
+players.forEach(player => {
+player.score = 0;
+});
+ 
+rebuildRandomPool();
+updateTracker();
+renderScoreScreen();
+renderQuestion();
+}
+
+
+ 
+function toggleScoreScreen(show) {
+const el =
+document.getElementById(
+"scoreScreen"
+);
+ 
+el.style.display =
+show ? "flex" : "none";
+ 
+renderScoreScreen();
+}
+ 
+async function toggleFullscreen() {
+const el =
+document.documentElement;
+ 
+if (
+!document.fullscreenElement
+) {
+await el.requestFullscreen();
+} else {
+await document.exitFullscreen();
+}
+}
+ 
+document.addEventListener(
+"keydown",
+function (e) {
+if (!gameStarted) return;
+ 
+if (
+e.key === "ArrowRight"
+) {
+goToNextQuestion();
+}
+ 
+if (
+e.key === "ArrowLeft"
+) {
+prevQuestion();
+}
+ 
+if (
+e.key === " " ||
+e.code === "Space"
+) {
+e.preventDefault();
+toggleAnswer();
+}
+ 
+if (
+e.key === "r" ||
+e.key === "R"
+) {
+randomQuestion();
+}
+ 
+if (
+e.key === "s" ||
+e.key === "S"
+) {
+toggleScoreScreen(true);
+}
+ 
+if (
+e.key === "f" ||
+e.key === "F"
+) {
+toggleFullscreen();
+}
+ 
+if (
+e.key === "Escape"
+) {
+toggleScoreScreen(false);
+}
+}
+);
+
+window.addEventListener("beforeunload", function (e) {
+if (!gameStarted) return;
+ 
+e.preventDefault();
+ 
+e.returnValue =
+"Are you sure you want to leave? Game progress and scores will be lost.";
+ 
+return e.returnValue;
+});
+
+buildSetupInputs();
+rebuildRandomPool();
+  </script>
+</body>
+
+</html>
