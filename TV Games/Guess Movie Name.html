@@ -235,16 +235,10 @@
     <div class="topbar">
       <div class="pill" id="progress">&#x1F3AF; <strong>Q 1 / 36</strong></div>
       <div class="pill" id="tracker">&#x2705; 0 &nbsp;|&nbsp; &#x23F3; 36</div>
-      <button class="btn-sm c-pink"   id="topAnswerBtn"        onclick="toggleAnswer()">&#x1F441; Show Answer</button>
-      <button class="btn-sm c-purple" onclick="randomQuestion()">&#x1F3B2; Random</button>
-      <button class="btn-sm c-blue"   onclick="toggleFullscreen()">&#x26F6; Full Screen</button>
-      <button class="btn-sm c-gold"   onclick="toggleScoreScreen(true)">&#x1F3C6; Scores</button>
       <div class="topbar-spacer"></div>
+      <button class="btn-sm c-pink"   id="topAnswerBtn"        onclick="toggleAnswer()">&#x1F441; Show Answer</button>
+      <button class="btn-sm c-blue"   onclick="toggleFullscreen()">&#x26F6; Full Screen</button>
       <button class="btn-sm c-ghost"  id="muteBtn" onclick="toggleMute()" title="Toggle sound (M)">&#x1F50A;</button>
-      <select id="playMode" class="player-select" style="min-height:52px;border-radius:var(--r-md);min-width:150px" onchange="setPlayMode(this.value)">
-        <option value="sequence">&#x25B6; Sequence</option>
-        <option value="random">&#x1F3B2; Random</option>
-      </select>
     </div>
 
     <div class="main">
@@ -272,9 +266,11 @@
     </div>
 
     <div class="controls">
-      <button class="btn c-purple" onclick="prevQuestion()">&#x25C4; Previous</button>
       <button class="btn c-gold"   onclick="toggleScoreScreen(true)">&#x1F3C6; Score Board</button>
-      <button class="btn c-blue"   onclick="nextQuestion()">Next &#x25BA;</button>
+      <select id="playMode" class="player-select" style="min-height:66px;border-radius:var(--r-lg);min-width:180px;font-size:1.05rem;font-weight:800" onchange="setPlayMode(this.value)">
+        <option value="sequence">&#x25B6; Sequence</option>
+        <option value="random">&#x1F3B2; Random</option>
+      </select>
       <button class="btn c-ghost"  onclick="resetGame()" style="min-width:150px">&#x21BA; Reset</button>
     </div>
 
