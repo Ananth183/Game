@@ -113,7 +113,7 @@
     .action-card{background:var(--surface-hi);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:18px 20px}
     .action-label{font-size:.82rem;font-weight:900;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px}
     .action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-    .controls{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;padding:14px 20px 18px;border-top:1.5px solid var(--border);background:rgba(255,255,255,.02)}
+    .controls{display:flex;justify-content:center;gap:12px;flex-wrap:nowrap;padding:14px 20px 18px;border-top:1.5px solid var(--border);background:rgba(255,255,255,.02)}
 
     /* buttons */
     .btn,.btn-sm{border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:800;letter-spacing:.4px;position:relative;overflow:hidden;transition:transform .15s,filter .15s,box-shadow .15s}
@@ -302,7 +302,7 @@ function _actx(){
 function toggleMute(){
   _muted=!_muted;
   const b=document.getElementById("muteBtn");
-  b.textContent=_muted?"&#x1F507;":"&#x1F50A;";
+  b.innerHTML=_muted?"&#x1F507;":"&#x1F50A;";
   b.classList.toggle("muted",_muted);
 }
 function _tone(ac,freq,type,t,dur,vol,freqEnd){
