@@ -413,6 +413,8 @@
     .btn-full    { background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; box-shadow: 0 6px 20px rgba(56,189,248,0.35); }
     .btn-score   { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; box-shadow: 0 6px 20px rgba(245,158,11,0.35); }
     .btn-random  { background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; box-shadow: 0 6px 20px rgba(167,139,250,0.4); }
+    .btn-mute    { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.75); font-size: 1.1rem; }
+    .btn-mute.muted { background: rgba(255,80,80,0.18); border-color: rgba(255,80,80,0.35); color: rgba(255,120,120,0.9); }
 
     /* ── Main panels ── */
     .main {
@@ -766,6 +768,7 @@
         <button class="btn-top btn-random" onclick="randomQuestion()">Random</button>
         <button class="btn-top btn-full" onclick="toggleFullscreen()">Full Screen</button>
         <button class="btn-top btn-score" onclick="toggleScoreScreen(true)">Score Screen</button>
+        <button class="btn-top btn-mute" id="muteBtn" onclick="toggleMute()" title="Toggle sound">🔊</button>
         <select id="playMode" class="player-select" onchange="setPlayMode(this.value)">
           <option value="sequence">Sequence</option>
           <option value="random">Random</option>
@@ -825,6 +828,126 @@
   </div>
 
   <script>
+    // ── Sound engine (Web Audio API, no external files) ──
+    let _audioCtx = null;
+    let _muted = false;
+
+    function _ctx() {
+      if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (_audioCtx.state === 'suspended') _audioCtx.resume();
+      return _audioCtx;
+    }
+
+    function toggleMute() {
+      _muted = !_muted;
+      const btn = document.getElementById('muteBtn');
+      btn.textContent = _muted ? '🔇' : '🔊';
+      btn.classList.toggle('muted', _muted);
+    }
+
+    function _tone(ctx, freq, type, start, dur, vol) {
+      const osc = ctx.createOscillator();
+      const g   = ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination);
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, start);
+      g.gain.setValueAtTime(vol, start);
+      g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+      osc.start(start); osc.stop(start + dur + 0.02);
+    }
+
+    function _noise(ctx, start, dur, vol) {
+      const buf  = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      const g = ctx.createGain();
+      src.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(vol, start);
+      g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+      src.start(start); src.stop(start + dur + 0.02);
+    }
+
+    function sfxStart() {
+      if (_muted) return;
+      const c = _ctx(), t = c.currentTime;
+      [[523,0],[659,0.12],[784,0.24],[1047,0.38],[1319,0.52]].forEach(([f,d]) => _tone(c,f,'sine',t+d,0.5,0.22));
+    }
+
+    function sfxReveal() {
+      if (_muted) return;
+      const c = _ctx(), t = c.currentTime;
+      const osc = c.createOscillator(), g = c.createGain();
+      osc.connect(g); g.connect(c.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(160, t);
+      osc.frequency.exponentialRampToValueAtTime(900, t + 0.35);
+      g.gain.setValueAtTime(0.28, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+      osc.start(t); osc.stop(t + 0.6);
+      setTimeout(() => { _tone(_ctx(), 1047, 'sine', _ctx().currentTime, 0.45, 0.2); }, 360);
+    }
+
+    function sfxHide() {
+      if (_muted) return;
+      const c = _ctx(), t = c.currentTime;
+      _tone(c, 520, 'sine', t,       0.12, 0.15);
+      _tone(c, 320, 'sine', t + 0.1, 0.18, 0.12);
+    }
+
+    function sfxCorrect() {
+      if (_muted) return;
+      const c = _ctx(), t = c.currentTime;
+      [[523,0],[659,0.1],[784,0.2],[1047,0.3]].forEach(([f,d]) => {
+        _tone(c, f, 'sine', t+d, 0.38, 0.25);
+        _tone(c, f*1.5, 'sine', t+d, 0.22, 0.08);
+      });
+    }
+
+    function sfxSkip() {
+      if (_muted) return;
+      const c = _ctx(), t = c.currentTime;
+      _tone(c, 380, 'sine', t,       0.12, 0.18);
+      _tone(c, 260, 'sine', t + 0.1, 0.18, 0.15);
+    }
+
+    function sfxNext() {
+      if (_muted) return;
+      const c = _ctx(), t = c.currentTime;
+      _tone(c, 660, 'sine', t,       0.1,  0.14);
+      _tone(c, 880, 'sine', t + 0.09, 0.14, 0.14);
+    }
+
+    function sfxPrev() {
+      if (_muted) return;
+      const c = _ctx(), t = c.currentTime;
+      _tone(c, 880, 'sine', t,       0.1,  0.14);
+      _tone(c, 660, 'sine', t + 0.09, 0.14, 0.14);
+    }
+
+    function sfxRandom() {
+      if (_muted) return;
+      const c = _ctx(), t = c.currentTime;
+      for (let i = 0; i < 7; i++)
+        _tone(c, 250 + Math.random()*550, 'square', t + i*0.045, 0.04, 0.08);
+      _tone(c, 1047, 'sine', t + 0.38, 0.35, 0.2);
+    }
+
+    function sfxScore() {
+      if (_muted) return;
+      const c = _ctx(), t = c.currentTime;
+      for (let i = 0; i < 10; i++) _noise(c, t + i*0.04, 0.04, 0.12);
+      [[523,0.45],[659,0.56],[784,0.67],[1047,0.78]].forEach(([f,d]) => _tone(c,f,'sine',t+d,0.45,0.22));
+    }
+
+    function sfxReset() {
+      if (_muted) return;
+      const c = _ctx(), t = c.currentTime;
+      [1047, 784, 659, 523, 392].forEach((f, i) => _tone(c, f, 'sine', t + i*0.09, 0.18, 0.18));
+    }
+    // ── End sound engine ──
+
     const questions = [
       { q: "Question 001", a: "Answer 001" },
       { q: "Question 002", a: "Answer 002" },
@@ -916,7 +1039,7 @@ return;
 }
  
 gameStarted = true;
- 
+sfxStart();
 document
 .getElementById("setupScreen")
 .classList.add("hidden");
@@ -1086,13 +1209,12 @@ renderScoreScreen();
 }
  
 function toggleAnswer() {
-answerVisible =
-!answerVisible;
- 
-renderQuestion();
+answerVisible = !answerVisible;
+if (answerVisible) sfxReveal(); else sfxHide();
 }
  
 function nextQuestion() {
+sfxNext();
 if (
 currentIndex <
 questions.length - 1
@@ -1106,6 +1228,7 @@ renderQuestion();
 }
  
 function prevQuestion() {
+sfxPrev();
 if (currentIndex > 0) {
 currentIndex--;
 }
@@ -1126,10 +1249,10 @@ function goToNextQuestion() {
 completedQuestions.add(
 currentIndex
 );
- 
+sfxSkip();
 rebuildRandomPool();
 updateTracker();
- 
+
 if (playMode === "random") {
 randomQuestion();
 } else {
@@ -1138,6 +1261,7 @@ nextQuestion();
 }
  
 function randomQuestion() {
+sfxRandom();
 rebuildRandomPool();
  
 if (randomPool.length === 0) {
@@ -1183,7 +1307,7 @@ return;
 }
  
 player.score++;
- 
+sfxCorrect();
 renderScoreScreen();
  
 goToNextQuestion();
@@ -1197,8 +1321,7 @@ const confirmReset = confirm(
 );
  
 if (!confirmReset) return;
- 
-currentIndex = 0;
+sfxReset();
 answerVisible = false;
  
 completedQuestions = new Set();
@@ -1217,6 +1340,7 @@ renderQuestion();
 
  
 function toggleScoreScreen(show) {
+if (show) sfxScore();
 const el =
 document.getElementById(
 "scoreScreen"
